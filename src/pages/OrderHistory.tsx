@@ -48,7 +48,28 @@ export const OrderHistory: React.FC = () => {
       .eq('canteen_id', canteenId)
       .order('created_at', { ascending: false });
 
-    setOrders(data || []);
+    const normalized = (data || []).map((o: any) => {
+      let items = o.items;
+      if (!Array.isArray(items)) {
+        if (typeof items === 'string') {
+          try {
+            items = JSON.parse(items);
+          } catch (e) {
+            items = [];
+          }
+        } else if (items == null) {
+          items = [];
+        } else if (typeof items === 'object') {
+          // If it's a single object, wrap it in an array
+          items = Array.isArray(items) ? items : [items];
+        } else {
+          items = [];
+        }
+      }
+      return { ...o, items } as Order;
+    });
+
+    setOrders(normalized);
   };
 
   const filterOrders = () => {

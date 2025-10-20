@@ -60,7 +60,7 @@ export const Dashboard: React.FC = () => {
     const { data } = await supabase
       .from('canteens')
       .select('id')
-      .eq('canteen_name', user.id)
+      .eq('owner_id', user.id)
       .maybeSingle();
 
     if (data) {
@@ -123,7 +123,27 @@ export const Dashboard: React.FC = () => {
       .in('status', ['pending', 'preparing', 'ready'])
       .order('created_at', { ascending: false });
 
-    setLiveOrders(data || []);
+    const normalized = (data || []).map((o: any) => {
+      let items = o.items;
+      if (!Array.isArray(items)) {
+        if (typeof items === 'string') {
+          try {
+            items = JSON.parse(items);
+          } catch (e) {
+            items = [];
+          }
+        } else if (items == null) {
+          items = [];
+        } else if (typeof items === 'object') {
+          items = Array.isArray(items) ? items : [items];
+        } else {
+          items = [];
+        }
+      }
+      return { ...o, items } as Order;
+    });
+
+    setLiveOrders(normalized);
   };
 
   const updateOrderStatus = async (orderId: string, newStatus: Order['status']) => {

@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 export const MenuManagement: React.FC = () => {
   const { user } = useAuth();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [canteenId, setCanteenId] = useState<string | null>("Chemistry Canteen");
+  const [canteenId, setCanteenId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [formData, setFormData] = useState({
@@ -47,7 +47,7 @@ export const MenuManagement: React.FC = () => {
     const { data, error } = await supabase
       .from('menu_items')
       .select('*')
-      .eq('canteen_name', canteenId)
+      .eq('canteen_id', canteenId)
       .order('created_at', { ascending: false });
     if (error) console.error('Fetch Error:', error);
     else console.log('Menu items fetched:', data);
@@ -63,7 +63,7 @@ export const MenuManagement: React.FC = () => {
       return};
 
     const itemData = {
-      canteen_name: canteenId,
+      canteen_id: canteenId,
       name: formData.name,
       description: formData.description,
       price: parseFloat(formData.price),
