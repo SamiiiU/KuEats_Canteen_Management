@@ -163,7 +163,7 @@ export const MenuManagement: React.FC = () => {
                   <p className="text-sm text-gray-600">{item.category}</p>
                 </div>
                 <p className="text-xl font-bold" style={{ color: '#831615' }}>
-                  ₹{parseFloat(item.price.toString()).toFixed(2)}
+                  PKR {parseFloat(item.price.toString()).toFixed(2)}
                 </p>
               </div>
 

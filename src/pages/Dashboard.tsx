@@ -263,7 +263,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <p className="text-xl font-bold" style={{ color: '#831615' }}>
-                      ₹{parseFloat(order.total_amount.toString()).toFixed(2)}
+                      PKR {parseFloat(order.total_amount.toString()).toFixed(2)}
                     </p>
                     <span
                       className="text-xs font-semibold px-3 py-1 rounded-full inline-block mt-2"
