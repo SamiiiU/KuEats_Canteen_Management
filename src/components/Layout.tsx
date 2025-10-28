@@ -104,12 +104,12 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
       {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden  "
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-y-scroll h-screen">
         <div className="p-8">
           {children}
         </div>

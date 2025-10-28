@@ -120,7 +120,7 @@ export const Dashboard: React.FC = () => {
       .from('orders')
       .select('*')
       .eq('canteen_id', canteenId)
-      .in('status', ['pending', 'preparing', 'ready'])
+      .in('status', ['pending', 'preparing', 'ready', 'pickedUp'])
       .order('created_at', { ascending: false });
 
     const normalized = (data || []).map((o: any) => {
@@ -161,7 +161,11 @@ export const Dashboard: React.FC = () => {
     switch (status) {
       case 'pending': return '#f59e0b';
       case 'preparing': return '#3b82f6';
-      case 'completed': return '#10b981';
+      case 'ready': return '#3b82f6';
+      case 'pickedUp': return '#3b82f6';
+      case 'completed': return '#3b82f6';
+
+
       default: return '#6b7280';
     }
   };
@@ -169,8 +173,10 @@ export const Dashboard: React.FC = () => {
   const getNextStatus = (currentStatus: Order['status']): Order['status'] | null => {
     switch (currentStatus) {
       case 'pending': return 'preparing';
-      case 'preparing': return 'completed';
-      case 'completed': return 'completed';
+      case 'preparing': return 'ready';
+      case 'ready': return 'pickedUp';
+      case 'pickedUp': return 'completed';
+      case 'completed' : return 'completed'
       default: return null;
     }
   };
@@ -178,8 +184,11 @@ export const Dashboard: React.FC = () => {
   const getStatusButtonText = (status: Order['status']) => {
     switch (status) {
       case 'pending': return 'Accept Order';
-      case 'preparing': return 'Mark as Completed';
-      case 'completed': return 'Complete Order';
+      case 'preparing': return 'Mark as Ready';
+      case 'ready': return 'Rider Picked Up';
+      case 'pickedUp': return 'Mark as Delivered';
+      case 'completed': return 'Complete Project';
+
       default: return '';
     }
   };
