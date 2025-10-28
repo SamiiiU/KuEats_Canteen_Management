@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LayoutDashboard, Menu, History, Star, LogOut, UtensilsCrossed } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import logo from '../assets/logo.png'
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate }) => {
   const { signOut } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const menuItems = [
     { id: 'dashboard' as const, label: 'Main Dashboard', icon: LayoutDashboard },
@@ -20,11 +22,41 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
 
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: '#f9f9f9' }}>
-      <aside className="w-64 shadow-lg" style={{ backgroundColor: '#831615' }}>
-        <div className="p-6">
+      {/* Mobile sidebar toggle button */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-50 bg-[#831615] text-white p-2 rounded-full shadow-lg"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Open sidebar"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          w-64 shadow-lg transition-all duration-300
+          bg-[#831615]
+          md:relative md:translate-x-0 md:block
+          fixed top-0 left-0 h-full z-40
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          md:h-auto
+        `}
+        style={{ backgroundColor: '#831615' }}
+      >
+        {/* Close button for mobile */}
+        <div className="md:hidden flex justify-end p-4">
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="text-white bg-[#831615] p-2 rounded-full"
+            aria-label="Close sidebar"
+          >
+            <UtensilsCrossed className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="p-6 pt-0 md:pt-6">
           <div className="flex items-center space-x-3 mb-8">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-              <UtensilsCrossed className="w-6 h-6" style={{ color: '#831615' }} />
+            <div className="rounded-full flex items-center justify-center">
+              <img src={logo} alt="KuEats Logo" style={{ width: 100 }} className="w-20 h-20" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-white">KuEats</h1>
@@ -40,7 +72,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
               return (
                 <button
                   key={item.id}
-                  onClick={() => onNavigate(item.id)}
+                  onClick={() => {
+                    onNavigate(item.id);
+                    setSidebarOpen(false); // Close sidebar on mobile after navigation
+                  }}
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                     isActive
                       ? 'bg-white text-gray-900'
@@ -65,6 +100,14 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigat
           </button>
         </div>
       </aside>
+
+      {/* Overlay for mobile sidebar */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       <main className="flex-1 overflow-auto">
         <div className="p-8">

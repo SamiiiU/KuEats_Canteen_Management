@@ -5,8 +5,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 export const OrderHistory: React.FC = () => {
   const { user } = useAuth();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<any>([]);
+  const [filteredOrders, setFilteredOrders] = useState<any>([]);
   const [canteenId, setCanteenId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -47,7 +47,7 @@ export const OrderHistory: React.FC = () => {
       .select('*')
       .eq('canteen_id', canteenId)
       .order('created_at', { ascending: false });
-
+    console.log("orders yere ", data[0].items[0].menuItem.price);
     const normalized = (data || []).map((o: any) => {
       let items = o.items;
       if (!Array.isArray(items)) {
@@ -94,9 +94,7 @@ export const OrderHistory: React.FC = () => {
     switch (status) {
       case 'pending': return '#f59e0b';
       case 'preparing': return '#3b82f6';
-      case 'ready': return '#10b981';
       case 'completed': return '#059669';
-      case 'cancelled': return '#ef4444';
       default: return '#6b7280';
     }
   };
@@ -126,9 +124,7 @@ export const OrderHistory: React.FC = () => {
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
             <option value="preparing">Preparing</option>
-            <option value="ready">Ready</option>
             <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
           </select>
         </div>
       </div>
@@ -139,7 +135,6 @@ export const OrderHistory: React.FC = () => {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h3 className="font-bold text-xl">{order.customer_name}</h3>
-                <p className="text-sm text-gray-600">{order.customer_phone}</p>
                 <div className="flex items-center text-sm text-gray-500 mt-2">
                   <Calendar className="w-4 h-4 mr-1" />
                   {new Date(order.created_at).toLocaleString()}
@@ -170,7 +165,7 @@ export const OrderHistory: React.FC = () => {
                     <span className="text-gray-700">
                       {item.name} <span className="text-gray-500">x {item.quantity}</span>
                     </span>
-                    <span className="font-medium">PKR {(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-medium">PKR { (item.quantity)  }</span>
                   </div>
                 ))}
               </div>

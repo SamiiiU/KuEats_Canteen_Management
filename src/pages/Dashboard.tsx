@@ -155,12 +155,13 @@ export const Dashboard: React.FC = () => {
     loadLiveOrders();
     loadStats();
   };
+  // status = ANY (ARRAY['pending'::text, 'preparing'::text, 'ready'::text, 'completed'::text, 'cancelled'::text])
 
   const getStatusColor = (status: Order['status']) => {
     switch (status) {
       case 'pending': return '#f59e0b';
       case 'preparing': return '#3b82f6';
-      case 'ready': return '#10b981';
+      case 'completed': return '#10b981';
       default: return '#6b7280';
     }
   };
@@ -168,8 +169,8 @@ export const Dashboard: React.FC = () => {
   const getNextStatus = (currentStatus: Order['status']): Order['status'] | null => {
     switch (currentStatus) {
       case 'pending': return 'preparing';
-      case 'preparing': return 'ready';
-      case 'ready': return 'completed';
+      case 'preparing': return 'completed';
+      case 'completed': return 'completed';
       default: return null;
     }
   };
@@ -177,8 +178,8 @@ export const Dashboard: React.FC = () => {
   const getStatusButtonText = (status: Order['status']) => {
     switch (status) {
       case 'pending': return 'Accept Order';
-      case 'preparing': return 'Mark as Ready';
-      case 'ready': return 'Complete Order';
+      case 'preparing': return 'Mark as Completed';
+      case 'completed': return 'Complete Order';
       default: return '';
     }
   };
