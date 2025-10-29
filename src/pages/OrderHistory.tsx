@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Calendar } from 'lucide-react';
+import { Search, Calendar, LocateIcon, MapPin } from 'lucide-react';
 import { supabase, Order } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -105,7 +105,7 @@ export const OrderHistory: React.FC = () => {
 
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative">
+          {/* <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
@@ -114,7 +114,7 @@ export const OrderHistory: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none"
             />
-          </div>
+          </div> */}
 
           <select
             value={statusFilter}
@@ -136,10 +136,14 @@ export const OrderHistory: React.FC = () => {
           <div key={order.id} className="bg-white rounded-lg shadow p-6">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h3 className="font-bold text-xl">{order.customer_name}</h3>
+                <h3 className="font-bold text-xl">{order.customer.name}</h3>
                 <div className="flex items-center text-sm text-gray-500 mt-2">
                   <Calendar className="w-4 h-4 mr-1" />
                   {new Date(order.created_at).toLocaleString()}
+                </div>
+                <div className="flex items-center text-sm text-gray-500 mt-2">
+                  <MapPin className="w-4 h-4 mr-1" />
+                  {order.customer.department}
                 </div>
               </div>
 
@@ -165,9 +169,9 @@ export const OrderHistory: React.FC = () => {
                 {order.items.map((item, idx) => (
                   <div key={idx} className="flex justify-between text-sm">
                     <span className="text-gray-700">
-                      {item.name} <span className="text-gray-500">x {item.quantity}</span>
+                      {item.menuItem.name} <span className="text-gray-500">x {item.quantity}</span>
                     </span>
-                    <span className="font-medium">PKR { (item.quantity)  }</span>
+                    <span className="font-medium">PKR {  (item.menuItem.price)* (item.quantity)  }</span>
                   </div>
                 ))}
               </div>

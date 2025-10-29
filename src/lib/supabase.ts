@@ -30,13 +30,15 @@ export interface MenuItem {
 export interface Order {
   id: string;
   canteen_id: string;
-  customer_name: string;
-  customer_phone: string;
+  customer : {
+    name : string
+  };
   items: Array<{
-    menu_item_id: string;
-    name: string;
-    quantity: number;
-    price: number;
+    menuItem : Array<{
+      name : string;
+      price : number;
+    }>;
+    quantity : number;
   }>;
   total_amount: number;
   status: 'pending' | 'preparing' | 'ready' |'pickedUp' | 'delivered' | 'completed' | 'cancelled';

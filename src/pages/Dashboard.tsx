@@ -30,6 +30,7 @@ export const Dashboard: React.FC = () => {
     if (canteenId) {
       loadStats();
       loadLiveOrders();
+      console.log("live order" , liveOrders)
 
       const ordersSubscription = supabase
         .channel('orders_changes')
@@ -265,8 +266,8 @@ export const Dashboard: React.FC = () => {
               >
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h3 className="font-semibold text-lg">{order.customer_name}</h3>
-                    <p className="text-sm text-gray-600">{order.customer_phone}</p>
+                    <h3 className="font-semibold text-lg">{order.customer?.name}</h3>
+                    {/* <p className="text-sm text-gray-600">{order.customer}</p> */}
                     <p className="text-xs text-gray-500 mt-1">
                       {new Date(order.created_at).toLocaleString()}
                     </p>
@@ -292,8 +293,8 @@ export const Dashboard: React.FC = () => {
                   <ul className="space-y-1">
                     {order.items.map((item, idx) => (
                       <li key={idx} className="text-sm text-gray-600 flex justify-between">
-                        <span>{item.name} x {item.quantity}</span>
-                        <span>PKR {(item.price * item.quantity).toFixed(2)}</span>
+                        <span>{item.menuItem.name} x {item.quantity}</span>
+                        <span>PKR {(item.menuItem.price * item.quantity).toFixed(2)}</span>
                       </li>
                     ))}
                   </ul>
