@@ -41,7 +41,7 @@ export interface Order {
     quantity : number;
   }>;
   total_amount: number;
-  status: 'pending' | 'preparing' | 'ready' |'pickedUp' | 'delivered' | 'completed' | 'cancelled';
+  status: 'pending' | 'preparing' | 'ready' | 'pickedUp' | 'delivered' | 'completed' | 'cancelled';
   created_at: string;
   updated_at: string;
 }

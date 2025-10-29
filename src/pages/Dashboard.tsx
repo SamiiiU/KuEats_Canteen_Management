@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DollarSign, ShoppingBag, Star, TrendingUp, Clock, CheckCircle } from 'lucide-react';
-import { supabase, Order, MenuItem } from '../lib/supabase';
+import { supabase, Order, } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
 interface DashboardStats {
@@ -30,7 +30,7 @@ export const Dashboard: React.FC = () => {
     if (canteenId) {
       loadStats();
       loadLiveOrders();
-      console.log("live order" , liveOrders)
+      console.log("live order", liveOrders)
 
       const ordersSubscription = supabase
         .channel('orders_changes')
@@ -82,7 +82,7 @@ export const Dashboard: React.FC = () => {
       .from('reviews')
       .select('rating')
       .eq('canteen_id', canteenId);
-      
+
 
     const totalEarnings = orders?.reduce((sum, order) => {
       if (order.status === 'completed') {
@@ -177,7 +177,7 @@ export const Dashboard: React.FC = () => {
       case 'preparing': return 'ready';
       case 'ready': return 'pickedUp';
       case 'pickedUp': return 'completed';
-      case 'completed' : return 'completed'
+      case 'completed': return 'completed'
       default: return null;
     }
   };
@@ -300,19 +300,22 @@ export const Dashboard: React.FC = () => {
                   </ul>
                 </div>
 
-                {getNextStatus(order.status) && (
-                  <button
-                    onClick={() => {
-                      const nextStatus = getNextStatus(order.status);
-                      if (nextStatus) updateOrderStatus(order.id, nextStatus);
-                    }}
-                    className="w-full py-2 px-4 rounded-lg font-semibold text-white transition-opacity hover:opacity-90"
-                    style={{ backgroundColor: '#831615' }}
-                  >
-                    <CheckCircle className="w-4 h-4 inline mr-2" />
-                    {getStatusButtonText(order.status)}
-                  </button>
-                )}
+                {getNextStatus(order.status) &&
+                  !['ready', 'pickedUp', 'completed'].includes(order.status) && (
+                    <button
+                      onClick={() => {
+                        const nextStatus = getNextStatus(order.status);
+                        if (nextStatus) updateOrderStatus(order.id, nextStatus);
+                      }}
+                      className="w-full py-2 px-4 rounded-lg font-semibold text-white transition-opacity hover:opacity-90"
+                      style={{ backgroundColor: '#831615' }}
+                    >
+                      <CheckCircle className="w-4 h-4 inline mr-2" />
+                      {getStatusButtonText(order.status)}
+                    </button>
+                  )
+                }
+
               </div>
             ))}
           </div>
